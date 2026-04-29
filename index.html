@@ -3,49 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Imposter">
-    <link rel="apple-touch-icon" href="https://via.placeholder.com/180/0d1117/ff4444?text=IMP">
-    
-    <title>Imposter: AP World History</title>
+    <title>Imposter: AP World Edition</title>
     <style>
         :root {
             --bg: #0d1117; --panel: #161b22; --text: #c9d1d9;
             --red: #ff4444; --green: #2ea043; --blue: #58a6ff; --border: #30363d;
         }
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            background: var(--bg); color: var(--text); margin: 0; 
-            display: flex; justify-content: center; align-items: flex-start; 
-            min-height: 100vh; padding-top: env(safe-area-inset-top);
+            font-family: -apple-system, system-ui, sans-serif; 
+            background: var(--bg); color: var(--text); margin: 0; padding: 20px;
+            display: flex; justify-content: center;
         }
-        #app { 
-            background: var(--panel); width: 100%; max-width: 450px; 
-            padding: 20px; border-radius: 0 0 24px 24px; 
-            border: 1px solid var(--border); text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 50px;
-        }
-        .screen { display: none; flex-direction: column; gap: 15px; }
+        #app { width: 100%; max-width: 500px; background: var(--panel); border-radius: 20px; padding: 25px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .screen { display: none; flex-direction: column; gap: 20px; }
         .active { display: flex; }
-        h1 { font-size: 1.6rem; margin: 0; color: white; text-transform: uppercase; letter-spacing: 2px; }
-        .subtitle { color: #8b949e; font-size: 0.85rem; margin-bottom: 5px; }
-        input, select { background: var(--bg); border: 2px solid var(--border); color: white; padding: 15px; border-radius: 12px; font-size: 1rem; width: 100%; -webkit-appearance: none; }
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; color: white; }
+        .subtitle { color: #8b949e; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        input, select { background: var(--bg); border: 2px solid var(--border); color: white; padding: 15px; border-radius: 12px; font-size: 1rem; width: 100%; }
         input:focus { border-color: var(--blue); outline: none; }
-        .player-row { display: flex; gap: 8px; align-items: center; margin-bottom: 5px; }
-        .btn-remove { background: transparent; color: var(--red); border: 1px solid var(--red); width: 45px; height: 50px; border-radius: 12px; font-size: 1.5rem; flex-shrink: 0; }
-        button { background: var(--blue); color: white; border: none; padding: 18px; border-radius: 14px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
+        .player-row { display: flex; gap: 10px; margin-bottom: 5px; }
+        .btn-remove { background: #21262d; color: var(--red); border: 1px solid var(--border); width: 50px; border-radius: 12px; font-size: 1.2rem; }
+        button { background: var(--blue); color: white; border: none; padding: 18px; border-radius: 14px; font-weight: bold; font-size: 1rem; cursor: pointer; }
         button:active { opacity: 0.8; transform: scale(0.98); }
         .btn-success { background: var(--green); }
         .btn-danger { background: var(--red); }
-        .btn-sec { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 12px; }
-        .card { background: var(--bg); border: 2px dashed var(--border); padding: 25px; border-radius: 18px; margin: 10px 0; }
-        .tag { display: inline-block; background: #1f2428; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; color: var(--blue); font-weight: bold; }
+        .btn-sec { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .card { background: var(--bg); border: 2px dashed var(--border); padding: 30px; border-radius: 18px; position: relative; }
+        .tag { background: #1f2428; padding: 5px 10px; border-radius: 6px; font-size: 0.7rem; color: var(--blue); font-weight: bold; align-self: center; }
         .vote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .error-msg { color: var(--red); font-size: 0.8rem; display: none; }
     </style>
 </head>
 <body>
@@ -53,213 +39,201 @@
 <div id="app">
     <div id="setup" class="screen active">
         <h1>IMPOSTER</h1>
-        <p class="subtitle">AP WORLD STUDY EDITION</p>
+        <p class="subtitle">AP World History: Modern</p>
         
-        <div style="text-align: left; display: flex; flex-direction: column; gap: 12px;">
-            <div>
-                <label class="subtitle">SELECT UNIT RANGE</label>
-                <select id="unit-select">
-                    <option value="1-2">Units 1-2: 1200-1450 (Trade & Mongols)</option>
-                    <option value="3-4">Units 3-4: 1450-1750 (Empires)</option>
-                    <option value="5-6">Units 5-6: 1750-1900 (Revolutions)</option>
-                    <option value="7-9">Units 7-9: 1900-Present (Modern)</option>
-                    <option value="all">Mixed (All Units 1-9)</option>
-                </select>
-            </div>
-            
-            <div>
-                <label class="subtitle">PLAYER NAMES (Min 3)</label>
-                <div id="player-inputs">
-                    </div>
-                <button class="btn-sec" onclick="addField()" style="width:100%; margin-top:5px;">+ Add Player</button>
-            </div>
+        <div>
+            <label class="subtitle">Select Content</label>
+            <select id="unit-select">
+                <option value="1-2">Units 1-2: 1200-1450 (Global Tapestry)</option>
+                <option value="3-4">Units 3-4: 1450-1750 (Land & Sea Empires)</option>
+                <option value="5-6">Units 5-6: 1750-1900 (Industrialization)</option>
+                <option value="7-9">Units 7-9: 1900-Present (Modern Era)</option>
+                <option value="all">Mixed (All Units 1-9)</option>
+            </select>
         </div>
 
-        <p id="setup-error" class="error-msg">Please enter names for at least 3 players!</p>
-        <button class="btn-success" onclick="initGame()" style="margin-top:10px;">Start Game</button>
+        <div>
+            <label class="subtitle">Players</label>
+            <div id="player-inputs"></div>
+            <button class="btn-sec" onclick="addPlayerField()" style="width:100%; margin-top:10px;">+ Add Player</button>
+        </div>
+
+        <button class="btn-success" onclick="startGame()">Start Session</button>
     </div>
 
     <div id="pass" class="screen">
-        <p class="subtitle">PASS THE DEVICE TO:</p>
-        <h1 id="pass-name" style="color: var(--blue); font-size: 2.2rem;"></h1>
-        <div class="card"><p>Don't let others see your secret intel!</p></div>
-        <button onclick="revealRole()">View My Role</button>
+        <p class="subtitle">Secure Device</p>
+        <h1 id="pass-name" style="color: var(--blue); font-size: 2.5rem;"></h1>
+        <div class="card"><p>Pass the phone to this player. Keep the screen hidden!</p></div>
+        <button onclick="revealRole()">I am <span id="btn-name"></span></button>
     </div>
 
     <div id="secret" class="screen">
-        <div id="role-box" class="card"></div>
-        <button class="btn-sec" onclick="nextSecret()">Hide & Pass Next</button>
+        <div id="role-card" class="card"></div>
+        <button class="btn-sec" onclick="finishTurn()">Got it (Hide Screen)</button>
     </div>
 
     <div id="debate" class="screen">
-        <div id="turn-info" class="tag">ROUND 1</div>
-        <p class="subtitle">CURRENT SPEAKER:</p>
+        <div class="tag">DEBATE PHASE</div>
+        <p class="subtitle">Current Speaker:</p>
         <h1 id="speaker-name" style="color: var(--blue);"></h1>
-        <div class="card">Describe your intel WITHOUT saying the word. Sus out the sabotaging imposters.</div>
-        <button onclick="nextTurn()">Next Player</button>
-        <button id="vote-btn" class="btn-danger" style="margin-top:20px;" onclick="showVoting()">Ready to Vote</button>
+        <div class="card">Describe your term to prove you're a Citizen, but don't give the Imposter the word!</div>
+        <button onclick="nextSpeaker()">Next Speaker</button>
+        <button class="btn-danger" onclick="showVoting()" style="margin-top:20px;">Begin Vote</button>
     </div>
 
     <div id="voting" class="screen">
-        <h1>VOTING</h1>
-        <p class="subtitle">Who is the imposter?</p>
+        <h1>Cast Vote</h1>
+        <p class="subtitle">Identify the Imposter</p>
         <div id="vote-list" class="vote-grid"></div>
-        <button class="btn-sec" onclick="showScreen('debate')" style="margin-top:10px;">Back to Debate</button>
+        <button class="btn-sec" onclick="showScreen('debate')">Cancel</button>
     </div>
 
     <div id="result" class="screen">
-        <h1>EJECTION</h1>
+        <h1 id="res-header">RESULTS</h1>
         <div class="card">
-            <h2 id="res-name"></h2>
-            <div id="res-status"></div>
+            <h2 id="res-name" style="margin:0;"></h2>
+            <p id="res-status"></p>
+            <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+            <p class="subtitle">The Secret Topic Was:</p>
+            <h2 id="res-term" style="color:white; margin:0;"></h2>
+            <p id="res-hint" style="font-style: italic; color: #8b949e;"></p>
         </div>
-        <button class="btn-success" onclick="reset()">New Game</button>
+        <button class="btn-success" onclick="location.reload()">Play Again</button>
     </div>
 </div>
 
 <script>
-    // Data sourced from AP World History Modern CED [cite: 104-108]
-    const CED_CRYPTIC = {
+    // Data sourced from AP World History Modern CED [cite: 123, 158, 186, 264, 293]
+    const CED_DATA = {
         "1-2": [
-            { t: "Champa Rice", h: "Vietnam Terraces" },
-            { t: "Silk Road", h: "Caravanserai" },
-            { t: "The Mongols", h: "Steppe Archery" },
-            { t: "Mansa Musa", h: "Hajj to Mecca" },
-            { t: "Swahili Coast", h: "Monsoon Winds" },
-            { t: "Song Dynasty", h: "Civil Service Exam" }
+            { t: "Champa Rice", h: "Agricultural growth in the Song Dynasty" },
+            { t: "The Mongols", h: "Khanates and Silk Road security" },
+            { t: "Caravanserai", h: "Rest stops for desert trade" },
+            { t: "Mansa Musa", h: "Gold and salt trade in Mali" },
+            { t: "Sufism", h: "Mystical expansion of Islam" }
         ],
         "3-4": [
-            { t: "Columbian Exchange", h: "The Great Dying" },
-            { t: "Ottoman Empire", h: "Janissary Corps" },
-            { t: "Taj Mahal", h: "Mughal Architecture" },
-            { t: "Mercantilism", h: "Positive Trade Balance" },
-            { t: "Devshirme", h: "Blood Tax" },
-            { t: "Casta System", h: "Mestizo and Peninsulare" }
+            { t: "Janissaries", h: "Elite Ottoman soldier-bureaucrats" },
+            { t: "Columbian Exchange", h: "Transfer of crops, disease, and animals" },
+            { t: "Mercantilism", h: "State control of global economy" },
+            { t: "The Casta System", h: "Social hierarchy in the Americas" },
+            { t: "Tokugawa Shogunate", h: "Isolationist Japanese rule" }
         ],
         "5-6": [
-            { t: "Industrialization", h: "The Spinning Jenny" },
-            { t: "French Revolution", h: "The Guillotine" },
-            { t: "Social Darwinism", h: "Survival of the Fittest" },
-            { t: "Meiji Restoration", h: "Samurai Reform" },
-            { t: "Berlin Conference", h: "Scramble for Africa" },
-            { t: "Simon Bolivar", h: "Jamaica Letter" }
+            { t: "Social Darwinism", h: "Justification for Imperialism" },
+            { t: "Meiji Restoration", h: "Rapid Japanese industrialization" },
+            { t: "Berlin Conference", h: "Scramble for Africa borders" },
+            { t: "Simon Bolivar", h: "Enlightenment-inspired Latin revolutions" },
+            { t: "Steam Engine", h: "Fossil fuel powered production" }
         ],
         "7-9": [
-            { t: "The Cold War", h: "MAD Doctrine" },
-            { t: "Green Revolution", h: "Norman Borlaug" },
-            { t: "Great Leap Forward", h: "Steel Production" },
-            { t: "Proxy Wars", h: "Vietnam and Korea" },
-            { t: "Apartheid", h: "Nelson Mandela" },
-            { t: "NAFTA", h: "Trade Bloc" }
+            { t: "Proxy Wars", h: "Vietnam, Korea, and Angola" },
+            { t: "The Green Revolution", h: "Chemically enhanced agriculture" },
+            { t: "Apartheid", h: "Segregation system in South Africa" },
+            { t: "Great Leap Forward", h: "Mao's industrial experiment" },
+            { t: "Non-Aligned Movement", h: "Staying neutral during Cold War" }
         ]
     };
 
-    let g = { players: [], alive: [], termObj: null, currentIdx: 0 };
+    let game = { players: [], currentIdx: 0, term: null };
 
-    // Self-starting player fields
-    function addField() {
-        const container = document.getElementById('player-inputs');
-        const row = document.createElement('div');
-        row.className = 'player-row';
-        row.innerHTML = `<input type="text" class="p-in" placeholder="Enter Name"><button class="btn-remove" onclick="removePlayer(this)">×</button>`;
-        container.appendChild(row);
+    function addPlayerField() {
+        const div = document.createElement('div');
+        div.className = 'player-row';
+        div.innerHTML = `<input type="text" class="p-input" placeholder="Name"><button class="btn-remove" onclick="this.parentElement.remove()">×</button>`;
+        document.getElementById('player-inputs').appendChild(div);
     }
 
-    function removePlayer(btn) {
-        btn.parentElement.remove();
-    }
+    // Default 3 players
+    for(let i=0; i<3; i++) addPlayerField();
 
-    // Initialize with 3 players automatically
-    for(let i=0; i<3; i++) addField();
-
-    function initGame() {
-        const inputs = document.querySelectorAll('.p-in');
+    function startGame() {
+        const inputs = document.querySelectorAll('.p-input');
         const names = Array.from(inputs).map(i => i.value.trim()).filter(n => n !== "");
         
-        if(names.length < 3) {
-            document.getElementById('setup-error').style.display = 'block';
-            return;
-        }
-        document.getElementById('setup-error').style.display = 'none';
+        if(names.length < 3) return alert("Need at least 3 players!");
 
-        // Assign Roles
         const impIdx = Math.floor(Math.random() * names.length);
-        g.players = names.map((n, i) => ({ name: n, role: (i === impIdx ? 'Imposter' : 'Citizen') }));
-        g.alive = [...Array(names.length).keys()];
+        game.players = names.map((n, i) => ({ name: n, role: i === impIdx ? 'Imposter' : 'Citizen' }));
         
-        // Select Content
-        const uVal = document.getElementById('unit-select').value;
-        const pool = uVal === 'all' ? Object.values(CED_CRYPTIC).flat() : CED_CRYPTIC[uVal];
-        g.termObj = pool[Math.floor(Math.random() * pool.length)];
+        const unit = document.getElementById('unit-select').value;
+        const pool = unit === 'all' ? Object.values(CED_DATA).flat() : CED_DATA[unit];
+        game.term = pool[Math.floor(Math.random() * pool.length)];
         
-        g.currentIdx = 0;
+        game.currentIdx = 0;
+        showPassScreen();
+    }
+
+    function showPassScreen() {
         showScreen('pass');
-        document.getElementById('pass-name').innerText = g.players[0].name;
+        const p = game.players[game.currentIdx];
+        document.getElementById('pass-name').innerText = p.name;
+        document.getElementById('btn-name').innerText = p.name;
     }
 
     function revealRole() {
         showScreen('secret');
-        const box = document.getElementById('role-box');
-        const p = g.players[g.currentIdx];
+        const p = game.players[game.currentIdx];
+        const card = document.getElementById('role-card');
+        
         if(p.role === 'Imposter') {
-            box.innerHTML = `<h2 style="color:var(--red)">IMPOSTER</h2><div class="tag">YOUR CLUE</div><h1 style="color:white; margin:20px 0;">${g.termObj.h}</h1><p class="subtitle">Blend in. The citizens have the full name of this topic.</p>`;
+            card.innerHTML = `<h2 style="color:var(--red)">IMPOSTER</h2><p class="subtitle">YOUR CLUE</p><h1 style="color:white">${game.term.h}</h1><p>The citizens have the actual word. Blend in!</p>`;
         } else {
-            box.innerHTML = `<h2 style="color:var(--green)">CITIZEN</h2><div class="tag">TARGET TOPIC</div><h1 style="color:white; margin:20px 0;">${g.termObj.t}</h1><p class="subtitle">Identify the person who only knows the clue.</p>`;
+            card.innerHTML = `<h2 style="color:var(--green)">CITIZEN</h2><p class="subtitle">SECRET TOPIC</p><h1 style="color:white">${game.term.t}</h1><p>Describe this without being too obvious.</p>`;
         }
     }
 
-    function nextSecret() {
-        g.currentIdx++;
-        if(g.currentIdx < g.players.length) {
-            showScreen('pass');
-            document.getElementById('pass-name').innerText = g.players[g.currentIdx].name;
+    function finishTurn() {
+        game.currentIdx++;
+        if(game.currentIdx < game.players.length) {
+            showPassScreen();
         } else {
-            g.currentIdx = 0;
+            game.currentIdx = 0;
             showScreen('debate');
-            document.getElementById('speaker-name').innerText = g.players[0].name;
+            document.getElementById('speaker-name').innerText = game.players[0].name;
         }
     }
 
-    function nextTurn() {
-        g.currentIdx++;
-        const pIdx = g.currentIdx % g.players.length;
-        document.getElementById('speaker-name').innerText = g.players[pIdx].name;
+    function nextSpeaker() {
+        game.currentIdx = (game.currentIdx + 1) % game.players.length;
+        document.getElementById('speaker-name').innerText = game.players[game.currentIdx].name;
     }
 
     function showVoting() {
         showScreen('voting');
         const list = document.getElementById('vote-list');
         list.innerHTML = '';
-        g.players.forEach((p, idx) => {
-            const b = document.createElement('button');
-            b.innerText = p.name;
-            b.onclick = () => eject(idx);
-            list.appendChild(b);
+        game.players.forEach((p, i) => {
+            const btn = document.createElement('button');
+            btn.innerText = p.name;
+            btn.onclick = () => showResult(i);
+            list.appendChild(btn);
         });
     }
 
-    function eject(idx) {
+    function showResult(idx) {
         showScreen('result');
-        const p = g.players[idx];
-        const statusDiv = document.getElementById('res-status');
+        const p = game.players[idx];
         document.getElementById('res-name').innerText = p.name;
-        
+        document.getElementById('res-term').innerText = game.term.t;
+        document.getElementById('res-hint').innerText = game.term.h;
+
         if(p.role === 'Imposter') {
-            statusDiv.innerHTML = `<div style="color:var(--green); font-weight:900; font-size:1.5rem;">WAS THE IMPOSTER!</div><p>Victory for the Citizens.</p>`;
+            document.getElementById('res-header').innerText = "VICTORY";
+            document.getElementById('res-status').innerText = "Was the Imposter! The Citizens successfully identified the mole.";
+            document.getElementById('res-status').style.color = "var(--green)";
         } else {
-            statusDiv.innerHTML = `<div style="color:var(--red); font-weight:900; font-size:1.5rem;">WAS INNOCENT.</div><p>The Imposter sabotaged the group!</p>`;
+            document.getElementById('res-header').innerText = "DEFEAT";
+            document.getElementById('res-status').innerText = "Was Innocent. The Imposter has escaped!";
+            document.getElementById('res-status').style.color = "var(--red)";
         }
-        statusDiv.innerHTML += `<hr style="border:1px solid var(--border); margin:15px 0;"><p>Topic: <b>${g.termObj.t}</b><br>Clue: <i>${g.termObj.h}</i></p>`;
     }
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
-    }
-
-    function reset() {
-        location.reload();
     }
 </script>
 </body>
